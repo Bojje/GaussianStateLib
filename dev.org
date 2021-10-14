@@ -6,3 +6,9 @@
 ** Snak med Jacob om flere tests som kan teste om implementeringen virker
 ** Problemer med measure fock state:
 *** Lige nu starter weights fra 0...n-1, men modes går 1...n
+
+
+* TODO
+** Lav forsøgs setup i GBS artikel
+** Lav homodyn måling på alle 'top modes'
+** Undersøg ko-varians matricen

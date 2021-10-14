@@ -434,3 +434,14 @@ class GaussianState:
         # Needs a normalization to become general
 
         return weight, µ, sigma_m
+
+    def add_loss(self, tau, mode='All'):
+        """
+        Function that adds loss to a specific mode or to all modes
+        """
+        if mode == 'All':
+            I = np.identity(2 * self.modes)
+            self.sigma = self.sigma * tau + (1 - tau) * I
+            self.mu *= np.sqrt(tau) * self.mu
+        else:
+            self.sigma[(self.modes - 1)]
