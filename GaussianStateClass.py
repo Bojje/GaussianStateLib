@@ -444,4 +444,6 @@ class GaussianState:
             self.sigma = self.sigma * tau + (1 - tau) * I
             self.mu *= np.sqrt(tau) * self.mu
         else:
-            self.sigma[(self.modes - 1)]
+            i1 = (self.modes - 1) * 2
+            i2 = (self.modes) * 2
+            self.sigma[i1:i2, i1:i2]

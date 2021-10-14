@@ -12,3 +12,4 @@
 ** Lav forsøgs setup i GBS artikel
 ** Lav homodyn måling på alle 'top modes'
 ** Undersøg ko-varians matricen
+** hbar er ikke rigtigt for loss!!!!!!!! den er 2 for hastrup med 1 for jonatan
