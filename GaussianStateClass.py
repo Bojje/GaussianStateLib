@@ -156,7 +156,7 @@ class GaussianState:
     def phase_shift(self, phi, modes=[1]):
         """ Implements a phase shift of phi radians. Squeezing should be applied
         to generate a state which is not invariant to rotation"""
-        R_phi = np.array([[np.cos(phi), -np.sin(phi)], [np.sin(phi), np.cos(phi)]])
+        R_phi = np.array([[np.cos(phi), np.sin(phi)], [-np.sin(phi), np.cos(phi)]])
         R_full = np.identity(self.modes * 2)
         for m in modes:
             mi = m - 1
@@ -312,7 +312,7 @@ class GaussianState:
         between an A and a B channel which are used extensively while creating
         cluster states
         """
-        print("Implemented, needs testing")
+        # print("Implemented, needs testing")
         start_vec = np.arange(2 * self.modes)
         if target_mode == -1:
             start_vec = np.delete(start_vec, 2 * mode - 1)
@@ -354,6 +354,7 @@ class GaussianState:
 
         # First we permute the covariance matrix so the chosen mode is made into
         # the last mode
+        self.add_vacuum()
         self.permute_mode(mode, -1)
         sigma_A = self.sigma[:-2, :-2]
         sigma_AB = self.sigma[:-2,-2:] # Upper right
@@ -366,7 +367,7 @@ class GaussianState:
         # Number of modes are updated
         self.modes -= 1
         # A vacuum mode is added to replace the measured state
-        self.add_vacuum()
+
         mu_B = self.mu[-2:]
 
         # And the vacuum mode is returned back to the original place of the
@@ -388,6 +389,7 @@ class GaussianState:
         # A phase shift of theta is applied so we make sure that we measure
         # the chosen quadrature
         self.phase_shift(theta, [mode])
+        self.add_vacuum()
         self.permute_mode(mode, -1)
         sigma_A = self.sigma[:-2, :-2]
         sigma_AB = self.sigma[:-2,-2:]
@@ -400,7 +402,7 @@ class GaussianState:
         self.mu = self.mu[:-2] - 1 / B11 * sigma_AB@pi_mat@(u - self.mu[-2:])
         self.modes -= 1
         # A vacuum mode is added to replace the measured state
-        self.add_vacuum()
+        # self.add_vacuum()
 
         norm = 1 / np.sqrt(2 * np.pi * B11)
         weight_update = norm * np.exp(-1 / (2 * B11) * (u[0] - self.mu[-2]) ** 2)
@@ -437,13 +439,33 @@ class GaussianState:
 
     def add_loss(self, tau, mode='All'):
         """
-        Function that adds loss to a specific mode or to all modes
+        Function that adds loss to a specific mode or to all modes. 'tau' is the
+        loss parameter and must be between 0 and 1
         """
+        print("Implemented but not tested!")
         if mode == 'All':
             I = np.identity(2 * self.modes)
             self.sigma = self.sigma * tau + (1 - tau) * I
-            self.mu *= np.sqrt(tau) * self.mu
+            self.mu *= np.sqrt(tau)
         else:
-            i1 = (self.modes - 1) * 2
-            i2 = (self.modes) * 2
-            self.sigma[i1:i2, i1:i2]
+            hbar = 1 # this is just to make the dependence on hbar explicit
+            i1 = (mode - 1) * 2
+            i2 = (mode) * 2
+            X = self.sigma[i1:i2, i1:i2] * tau
+            X += hbar * (1 - tau) / 2 * np.eye(2)
+            self.sigma[i1:i2, i1:i2] = X
+            self.mu[i1:i2] = np.sqrt(tau)
+
+    def williamson_decomp(self):
+        """
+        Function that calculates the Williamson decomposition of the gaussian state
+        """
+        print("Not implemented")
+
+    def delete_mode(self, mode):
+        S = np.delete(self.sigma, mode * 2 - 1, 0)
+        S = np.delete(S, mode * 2 - 1, 1)
+        S = np.delete(S, mode * 2 - 2, 0)
+        S = np.delete(S, mode * 2 - 2, 1)
+        self.sigma = S
+        self.modes -= 1

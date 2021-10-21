@@ -3,13 +3,23 @@
 ** Implementer displacement i NonGauss klassen
 ** Regn igennem og vær sikker på at den tilstand du regner på gør det den skal
 ** Lav funktion til at initialisere cluster states (eventuelt en ny klasse?)
-** Snak med Jacob om flere tests som kan teste om implementeringen virker
-** Problemer med measure fock state:
+** DONE Snak med Jacob om flere tests som kan teste om implementeringen virker
+CLOSED: [2021-10-18 Mon 11:05]
+:LOGBOOK:
+- State "DONE"       from              [2021-10-18 Mon 11:05]
+:END:
+** 'Problemer' med measure fock state:
 *** Lige nu starter weights fra 0...n-1, men modes går 1...n
 
 
 * TODO
 ** Lav forsøgs setup i GBS artikel
 ** Lav homodyn måling på alle 'top modes'
-** Undersøg ko-varians matricen
+** Undersøg co-varians matricen
+
+
+
+* Bekymringer:
 ** hbar er ikke rigtigt for loss!!!!!!!! den er 2 for hastrup med 1 for jonatan
+*** Men, hbar virker til kun at optræde i variansen for states -> tilføjet til ønskelisten at lave gemme 'hbar' som kan indstilles af brugeren
+*** Optræder i loss pga. 'identitet' er en thermal state med en varians der afhænger af valget af hbar

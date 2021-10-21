@@ -145,14 +145,16 @@ class NonGaussianState:
         return weight_a, µ, sigma_m
 
 
-    def init_fock_state(self,n, r=1e-1, modes=1):
+    def init_fock_state(self,n, r=1e-1):
         """
-        Creates an n fock state and saves it to the NonGauss object
+        Creates an n fock state and saves it to the NonGauss object.
+        if n is an int, the function will create a single mode
+        n-foton fock state. If n is given as either a list or an array, it will
+        create a fock state for each entry in n
         """
         from GaussianStateClass import GaussianState
-        if modes != 1:
-            print('Multiple modes have not been implemented yet!')
-        else:
+        import itertools
+        if type(n) == int:
             self.g_dic ={}
             weight, µ, sigma_m = self.gen_fock_state(n, r=r)
             for i in range(len(µ)):
@@ -161,6 +163,11 @@ class NonGaussianState:
                 g.mu = µ[i]
                 self.g_dic[i] =g
             self.weight = weight
+
+        else:
+            for mode, nn in enumerate(nn):
+                mi = mode - 1
+
 
     def calc_wigner_func(self, start= -4, stop=4, N=100, mode=1):
         """
