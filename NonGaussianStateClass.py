@@ -165,8 +165,15 @@ class NonGaussianState:
             self.weight = weight
 
         else:
-            for mode, nn in enumerate(nn):
-                mi = mode - 1
+            # First all of the different combinations of gausians are calculated
+            set_n = np.arange(n + 1)
+            set_n = [np.arange(nn + 1) for nn in n]
+            # make iterable cartesian product
+            cart_prod = itertools.product(*set_n)
+
+            # the different gaussians are created and stored in a library
+            weight, µ, sigma_m = self.gen_fock_state(np.max(n), r=r)
+
 
 
     def calc_wigner_func(self, start= -4, stop=4, N=100, mode=1):

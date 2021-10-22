@@ -469,3 +469,33 @@ class GaussianState:
         S = np.delete(S, mode * 2 - 2, 1)
         self.sigma = S
         self.modes -= 1
+
+
+    def a_a_dag(self, S):
+        """
+        This function transforms from x and p to creation and anhillation
+        operators
+        """
+        I_n = np.eye(len(self.sigma) // 2)
+        T = 0.5 * np.block([[I_n,1j*I_n],[I_n,-1j*I_n]])
+        # S = self.sigma#self.xpxp_xxpp()
+        S = T@S@np.linalg.inv(T)
+        return S
+
+    def xpxp_xxpp(self):
+        """
+        This function transforms the covariance matrix from the convention xpxp
+        to the convention xxpp. A few helper functions are created at the top.
+
+        This function does not change the sigma object of the GaussianStateClass, this is to
+        avoid breaking other functions by a sudden change in convention. This
+        function is primarily meant to be called by other functions, eg. the
+        williamson_decomp
+        """
+
+        n = len(self.sigma)
+        n = n // 2
+        indices = np.arange(2 * n).reshape(-1, 2).T.flatten()
+
+        return self.sigma[:, indices][indices] # forkert!!!! skal fixes check andre indices
+    # end dem her

@@ -152,3 +152,58 @@ plt.show()
 
 
 #quad data type
+
+
+
+
+
+
+#Function to left rotate arr[] of size n by d
+def leftRotate(arr, d):
+    """
+    Function from
+    https://www.geeksforgeeks.org/python-program-for-program-for-array-rotation-2/
+    arr is the array that should be rotated. d is the amount the array should be
+    rotated with.
+    Juggling algorithm o(n) time
+    """
+    n = len(arr)
+    arr1 = np.copy(arr)
+    for i in range(gcd(d,n)):
+
+        # move i-th values of blocks
+        temp = arr1[i]
+        j = i
+        while 1:
+            k = j + d
+            if k >= n:
+                k = k - n
+            if k == i:
+                break
+            arr1[j] = arr1[k]
+            j = k
+        arr1[j] = temp
+    return arr1
+
+
+def gcd(a, b):
+    """
+    Function that calculates the greates common divisor between two numbers a
+    and b
+    """
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a%b)
+sigma = np.diag(np.arange(1, 11))
+X = sigma[::2]
+P = sigma[1::2]
+X = np.array([leftRotate(x,i) for i,x in enumerate(X)])
+n = len(X)
+P = np.array([leftRotate(x,i+n + 1) for i,x in enumerate(P)])
+
+np.vstack((X, P))
+
+
+
+n = np.array([1, 2, 3])
